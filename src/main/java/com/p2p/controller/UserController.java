@@ -1,40 +1,39 @@
 package com.p2p.controller;
 
-import com.p2p.model.User;
-import com.p2p.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserRepository userRepository;
+    // Временное хранилище (заглушка)
+    private final Map<Long, BigDecimal> balances = new HashMap<>();
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController() {
+        // Добавляем тестового пользователя при запуске
+        balances.put(123456L, BigDecimal.valueOf(100.00));
     }
 
     @GetMapping("/{telegramId}/balance")
     public BigDecimal getBalance(@PathVariable Long telegramId) {
-        return userRepository.findByTelegramId(telegramId)
-                .map(User::getBalance)
-                .orElse(BigDecimal.ZERO);
+        return balances.getOrDefault(telegramId, BigDecimal.ZERO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestParam Long telegramId, @RequestParam String username) {
-        Optional<User> existingUser = userRepository.findByTelegramId(telegramId);
-        if (existingUser.isPresent()) {
-            return ResponseEntity.ok(existingUser.get());
+    public Map<String, Object> registerUser(@RequestParam Long telegramId, @RequestParam String username) {
+        // Если пользователя нет — создаём
+        if (!balances.containsKey(telegramId)) {
+            balances.put(telegramId, BigDecimal.valueOf(100.00));
         }
-        User user = new User();
-        user.setTelegramId(telegramId);
-        user.setUsername(username);
-        user.setBalance(BigDecimal.valueOf(100.00));
-        return ResponseEntity.ok(userRepository.save(user));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("telegramId", telegramId);
+        response.put("username", username);
+        response.put("balance", balances.get(telegramId));
+        return response;
     }
 }
