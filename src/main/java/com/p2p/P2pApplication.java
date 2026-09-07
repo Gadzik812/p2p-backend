@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;  // ← НОВЫЙ ИМПОРТ
 import org.apache.catalina.connector.Connector;
 
 @SpringBootApplication
+@EnableScheduling  // ← НОВАЯ СТРОЧКА (включает автоматическое обновление курса)
 public class P2pApplication {
 
     public static void main(String[] args) {
