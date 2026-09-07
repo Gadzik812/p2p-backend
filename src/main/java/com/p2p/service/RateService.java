@@ -22,10 +22,10 @@ public class RateService {
 
     public RateService(RapiraClient rapiraClient) {
         this.rapiraClient = rapiraClient;
-        updateMarketRate(); // При запуске сразу обновляем курс
+        updateMarketRate();
     }
 
-    @Scheduled(fixedDelay = 3600000) // Каждый час
+    @Scheduled(fixedDelay = 3600000)
     public void updateMarketRate() {
         try {
             BigDecimal newRate = rapiraClient.getMarketRate();
