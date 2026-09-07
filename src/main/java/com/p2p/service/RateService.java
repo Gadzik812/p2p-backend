@@ -25,16 +25,18 @@ public class RateService {
         updateMarketRate();
     }
 
-    @Scheduled(fixedDelay = 3600000)
+    // ОБНОВЛЕНИЕ КАЖДУЮ МИНУТУ!
+    @Scheduled(fixedDelay = 60000)  // <--- 60000 миллисекунд = 60 секунд
     public void updateMarketRate() {
         try {
             BigDecimal newRate = rapiraClient.getMarketRate();
             if (newRate.compareTo(BigDecimal.ZERO) > 0) {
                 this.marketRate = newRate;
                 this.lastUpdated = LocalDateTime.now();
+                System.out.println("✅ Курс обновлён: " + newRate + " ₽");
             }
         } catch (Exception e) {
-            // Оставляем старый курс
+            System.out.println("⚠️ Не удалось обновить курс: " + e.getMessage());
         }
     }
 
