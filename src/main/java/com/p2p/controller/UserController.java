@@ -1,11 +1,12 @@
-import org.springframework.http.ResponseEntity;
 package com.p2p.controller;
 
 import com.p2p.model.User;
 import com.p2p.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,22 +25,16 @@ public class UserController {
                 .orElse(BigDecimal.ZERO);
     }
 
-  @PostMapping("/register")
-public ResponseEntity<?> registerUser(@RequestParam Long telegramId, @RequestParam String username) {
-    // Проверяем, есть ли уже такой пользователь
-    Optional<User> existingUser = userRepository.findByTelegramId(telegramId);
-    
-    if (existingUser.isPresent()) {
-        // Если пользователь уже есть, возвращаем его без ошибки
-        return ResponseEntity.ok(existingUser.get());
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestParam Long telegramId, @RequestParam String username) {
+        Optional<User> existingUser = userRepository.findByTelegramId(telegramId);
+        if (existingUser.isPresent()) {
+            return ResponseEntity.ok(existingUser.get());
+        }
+        User user = new User();
+        user.setTelegramId(telegramId);
+        user.setUsername(username);
+        user.setBalance(BigDecimal.valueOf(100.00));
+        return ResponseEntity.ok(userRepository.save(user));
     }
-
-    // Если нет — создаём нового
-    User user = new User();
-    user.setTelegramId(telegramId);
-    user.setUsername(username);
-    user.setBalance(BigDecimal.valueOf(100.00));
-    User savedUser = userRepository.save(user);
-    
-    return ResponseEntity.ok(savedUser);
-}  
+}
