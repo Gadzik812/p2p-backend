@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 com\p2p\controller\UserController.class
 com\p2p\service\RateService.class
 com\p2p\config\WebConfig.class
@@ -7,9 +6,3 @@ com\p2p\P2pApplication.class
 com\p2p\integration\RapiraClient.class
 com\p2p\repository\UserRepository.class
 com\p2p\model\User.class
-=======
-com/p2p/controller/UserController.class
-com/p2p/model/User.class
-com/p2p/P2pApplication.class
-com/p2p/repository/UserRepository.class
->>>>>>> origin/main
