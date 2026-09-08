@@ -1,6 +1,6 @@
 com\p2p\controller\UserController.class
 com\p2p\service\RateService.class
-com\p2p\config\WebConfig.class
+WebConfig.class
 com\p2p\controller\RateController.class
 com\p2p\P2pApplication.class
 com\p2p\integration\RapiraClient.class
